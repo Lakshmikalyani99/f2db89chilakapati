@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  p Hello this is Lakshmi Kalyan's #{title}
+  - var image_names = ["iphone11.jpg","iphone12promax.jpg","iphone13promax.jpg","iphone14.jpg","iphone14pro.jpg"]
+  - var i =0;
+  - while(i<3){
+     - var randomNumber = Math.floor(Math.random()*5)
+     - img = "/images/"+image_names[randomNumber]
+     - i++
+     img(src=img,  height="300px",width="300px",alt="alt")     
+  -}

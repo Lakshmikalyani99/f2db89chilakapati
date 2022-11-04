@@ -1,0 +1,42 @@
+extends layout
+
+block content
+  -
+   let results =[
+      {
+        "Iphone_model": "12promax",
+        "color": "SierraBlue",
+        "price": 1000
+      },
+      {
+        "Iphone_model": "13promax",
+        "color": "black",
+        "price": 1100
+      },
+      {
+        "Iphone_model": "14Promax",
+        "color": "purple",
+        "price": 1200
+      },
+      {
+        "Iphone_model": "14pro",
+        "color": "Green",
+        "price": 1150
+      },
+      {
+        "Iphone_model": "13pro",
+        "color": "Silver",
+        "price": 1050
+      }
+    ]
+  h1= title
+  .container-fluid 
+    .row 
+      each phone in results
+        div(class="col-sm-2" onclick=`buy(${results.indexOf(phone)})`) 
+          each value,key in phone 
+            = " " +value
+  script.
+    function buy(index){
+      alert("You purchased item "+index)
+    }
