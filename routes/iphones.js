@@ -1,9 +1,7 @@
-var express = require('express');
-var router = express.Router();
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('iphones', { title: 'Iphone Search Results' });
-});
-
-module.exports = router;
+var express = require('express'); 
+const iphone_controlers= require('../controllers/Iphone'); 
+var router = express.Router(); 
+ 
+/* GET costumes */ 
+router.get('/', iphone_controlers.iphone_view_all_Page ); 
+module.exports = router; 
