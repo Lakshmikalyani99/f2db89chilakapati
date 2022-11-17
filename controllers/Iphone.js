@@ -47,8 +47,16 @@ exports.iphone_create_post =async function(req, res) {
 }; 
  
 // Handle iphone delete form on DELETE. 
-exports.iphone_delete = function(req, res) { 
-    res.send('NOT IMPLEMENTED: iphone delete DELETE ' + req.params.id); 
+exports.iphone_delete =async function(req, res) { 
+    console.log("delete "  + req.params.id) 
+    try { 
+        result = await Iphone.findByIdAndDelete(req.params.id) 
+        console.log("Removed " + result) 
+        res.send(result) 
+    } catch (err) { 
+        res.status(500) 
+        res.send(`{"error": Error deleting ${err}}`); 
+    } 
 }; 
  
 // Handle iphone update form on PUT. 
@@ -82,4 +90,52 @@ exports.iphone_view_all_Page = async function(req, res) {
         res.status(500); 
         res.send(`{"error": ${err}}`); 
     }   
+}; 
+exports.iphone_view_one_Page = async function(req, res) { 
+    console.log("single view for id "  + req.query.id) 
+    try{ 
+        result = await Iphone.findById( req.query.id) 
+        res.render('iphonedetail',  
+{ title: 'iphone Detail', toShow: result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+exports.iphone_create_Page =  function(req, res) { 
+    console.log("create view") 
+    try{ 
+        res.render('iphonecreate', { title: 'Iphone Create'}); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+exports.iphone_update_Page =  async function(req, res) { 
+    console.log("update view for item "+req.query.id) 
+    try{ 
+        let result = await Iphone.findById(req.query.id) 
+        res.render('iphoneupdate', { title: 'Iphone Update', toShow: result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
+}; 
+
+exports.iphone_delete_Page = async function(req, res) { 
+    console.log("Delete view for id "  + req.query.id) 
+    try{ 
+        result = await Iphone.findById(req.query.id) 
+        res.render('iphonedelete', { title: 'Iphone Delete', toShow: 
+result }); 
+    } 
+    catch(err){ 
+        res.status(500) 
+        res.send(`{'error': '${err}'}`); 
+    } 
 }; 

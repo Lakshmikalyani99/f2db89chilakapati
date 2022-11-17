@@ -1,0 +1,24 @@
+extends layout 
+ 
+block content 
+  h1= title 
+  if (toShow == null) 
+    h2 No instance to delete 
+  else
+  - let id = toShow._id 
+  - let model = toShow.model 
+  - let color = toShow.color 
+  - let price = toShow.price 
+  div 
+    div.row 
+      div(class='costumeAttr mr-3') Iphone ID is: 
+      div #{id} 
+    div.row 
+      div(class='costumeAttr mr-3') Iphone model is: 
+      div #{model} 
+    div.row 
+      div(class='costumeAttr mr-3') Iphone Price is: 
+      div #{price} 
+    div.row 
+      div(class='costumeAttr mr-3') Iphone Color is: 
+      div #{color} 

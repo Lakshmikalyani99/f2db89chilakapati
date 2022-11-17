@@ -5,7 +5,7 @@ block content
   .container-fluid 
     .row 
       each phone,key in results
-        div(class="col-sm-2" onclick=`buy(${key})`) 
+        div(class="col-sm-2 iphonebox" onclick=`buy(${key})`) 
            = " " +phone.model+" "+phone.color+" "+phone.price
   script.
     function buy(index){
