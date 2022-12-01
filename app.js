@@ -3,27 +3,43 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var Iphone = require("./models/Iphone");
+var passport = require('passport');
+var Account = require("./models/Account")
+var LocalStrategy = require('passport-local').Strategy; 
 
+passport.use(new LocalStrategy( 
+  function(username, password, done) { 
+    Account.findOne({ username: username }, function (err, user) { 
+      if (err) { return done(err); } 
+      if (!user) { 
+        return done(null, false, { message: 'Incorrect username.' }); 
+      } 
+      if (!user.validPassword(password)) { 
+        return done(null, false, { message: 'Incorrect password.' }); 
+      } 
+      return done(null, user); 
+    }); 
+  } ))
 require('dotenv').config(); 
 const connectionString = process.env.MONGO_CON 
 mongoose = require('mongoose'); 
-mongoose.connect(connectionString, {useNewUrlParser: true, useUnifiedTopology: true}); 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var iphonesRouter = require('./routes/iphones');
-var gridbuildRouter = require('./routes/gridbuild');
-var selectorRouter = require('./routes/selector');
-var Iphone = require("./models/Iphone");
-var resourceRouter = require("./routes/resource");
-
-var app = express();
-
+mongoose.connect(connectionString,  {useNewUrlParser: true, useUnifiedTopology: true}); 
 var db = mongoose.connection; 
  
 //Bind connection to error event  
-db.on('error', console.error.bind(console, 'MongoDB connectionrerror:')); 
+db.on('error', console.error.bind(console, 'MongoDB connection error:')); 
 db.once("open", function(){ 
   console.log("Connection to DB succeeded")}); 
+
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+var iphoneRouter = require('./routes/iphones');
+var gridbuildRouter = require('./routes/gridbuild');
+var selectorRouter = require('./routes/selector');
+var resourceRouter = require('./routes/resource');
+
+var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,16 +49,25 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(require('express-session')({ 
+  secret: 'keyboard cat', 
+  resave: false, 
+  saveUninitialized: false 
+})); 
+app.use(passport.initialize()); 
+app.use(passport.session()); 
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/iphones', iphonesRouter);
+app.use('/iphones',iphoneRouter);
 app.use('/gridbuild', gridbuildRouter);
 app.use('/selector', selectorRouter);
-app.use("/resource",resourceRouter);
-
+app.use('/resource',resourceRouter)
+passport.use(new LocalStrategy(Account.authenticate())); 
+passport.serializeUser(Account.serializeUser()); 
+passport.deserializeUser(Account.deserializeUser()); 
+ 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -87,5 +112,6 @@ Iphone({model:"13 pro max",  color:'white', price:1099});
  
 let reseed = true; 
 if (reseed) { recreateDB();} 
+
 
 module.exports = app;

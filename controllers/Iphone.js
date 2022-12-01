@@ -42,7 +42,7 @@ exports.iphone_create_post =async function(req, res) {
     } 
     catch(err){ 
         res.status(500); 
-        res.send(`{"error": ${err}}`); 
+        res.send(`{"error": "Please enter valid details"}`); 
     }   
 }; 
  
@@ -111,7 +111,7 @@ exports.iphone_create_Page =  function(req, res) {
     } 
     catch(err){ 
         res.status(500) 
-        res.send(`{'error': '${err}'}`); 
+        res.send(`{"error": "Please enter valid details"}`); 
     } 
 }; 
 

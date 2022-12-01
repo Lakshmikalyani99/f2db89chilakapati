@@ -2,12 +2,21 @@ extends layout
 
 block content
   h1= title
+
   .container-fluid 
-    .row 
-      each phone,key in results
-        div(class="col-sm-2 iphonebox" onclick=`buy(${key})`) 
-           = " " +phone.model+" "+phone.color+" "+phone.price
+      button.btn( class="btn-primary ml-1", onclick= `dispatch(\"/iphones/create")`) Go to create page
+      .row 
+        each phone,key in results
+          - let destination = `dispatch(\"/iphones/update?id=${phone._id}\")`
+          div(class="col-sm-2 iphonebox" onclick=`buy(${key})`) 
+            = " " +phone.model+" "+phone.color+" "+phone.price
+          button.btn( class="btn-primary ml-1", onclick= destination) Update
+          button.btn( class="btn-primary ml-1", onclick= `dispatch(\"/iphones/detail?id=${phone._id}\")`) Details
+          button.btn( class="btn-primary ml-1", onclick= `dispatch(\"/iphones/delete?id=${phone._id}\")`) Delete
   script.
     function buy(index){
       alert("You purchased item "+index)
+    }
+    function dispatch(path){ 
+      window.location.href=path 
     }
